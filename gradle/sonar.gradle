@@ -1,0 +1,27 @@
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+jacocoTestReport {
+    executionData(tasks.withType(Test))
+    classDirectories.from(files(sourceSets.main.output.classesDirs))
+    reports.xml.required = true
+}
+
+File sonarFile = file("sonar-project.properties")
+if (sonarFile.exists()) {
+    sonarFile.withReader {
+        Properties sonarProperties = new Properties()
+        sonarProperties.load(it)
+
+        sonarProperties.each { key, value ->
+            sonar {
+                properties {
+                    property key, value
+                }
+            }
+        }
+    }
+}
+
+project.tasks.sonar.dependsOn(jacocoTestReport)

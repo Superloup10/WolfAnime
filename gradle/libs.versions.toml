@@ -1,0 +1,95 @@
+[versions]
+gradle-version = "0.51.0"
+version-catalog-update = "0.8.4"
+dependency-analysis = "1.29.0"
+# @keep
+java = "21"
+# @pin
+kotlin = "1.9.22"
+kotlinx-datetime = "0.5.0"
+ktlint = "12.1.0"
+detekt = "1.23.5"
+dokka = "1.9.10"
+sonarqube = "4.4.1.3373"
+ktor = "3.0.0-beta-1"
+graphql = "7.0.2"
+javafx = "0.1.0"
+exposed = "0.47.0"
+postgresql = "42.7.1"
+h2 = "2.2.224"
+hikaricp = "5.1.0"
+logback = "1.4.14"
+# @pin
+tornadofx = "2.0.0-SNAPSHOT"
+
+[libraries]
+kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+detekt-formating = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" }
+ktor-resources = { module = "io.ktor:ktor-server-resources", version.ref = "ktor" }
+ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-client-content-negociation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
+exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+h2 = { module = "com.h2database:h2", version.ref = "h2" }
+hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
+graphql = { module = "com.expediagroup:graphql-kotlin-ktor-client", version.ref = "graphql" }
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+tornadofx = { module = "no.tornado:tornadofx", version.ref = "tornadofx" }
+
+[bundles]
+databases = [
+    "exposed-core",
+    "exposed-kotlin-datetime",
+    "hikaricp",
+    "kotlinx-datetime",
+]
+databases-runtime = [
+    "exposed-dao",
+    "exposed-jdbc",
+    "postgresql",
+]
+ktor = [
+    "ktor-client-content-negociation",
+    "ktor-client-core",
+    "ktor-client-logging",
+    "ktor-client-okhttp",
+    "ktor-resources",
+    "ktor-serialization-kotlinx-json",
+    "ktor-server-call-logging",
+    "ktor-server-content-negotiation",
+    "ktor-server-core",
+    "ktor-server-netty",
+]
+test = [
+    "kotlin-test-junit",
+    "ktor-server-test-host",
+]
+test-runtime = [
+    "h2",
+]
+
+[plugins]
+gradle-version = { id = "com.github.ben-manes.versions", version.ref = "gradle-version" }
+version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "version-catalog-update" }
+dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependency-analysis" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
+ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
+graphql = { id = "com.expediagroup.graphql", version.ref = "graphql" }
+javafx = { id = "org.openjfx.javafxplugin", version.ref = "javafx" }

@@ -1,0 +1,29 @@
+version: '3.1'
+
+services:
+  web:
+    image: wolfanime:latest
+    build:
+      context: .
+      dockerfile: back/Dockerfile
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+  postgres:
+    image: postgres:16.1-bookworm
+    restart: always
+    environment:
+      POSTGRES_DB: wolfanime
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 1s
+volumes:
+  postgresql:
