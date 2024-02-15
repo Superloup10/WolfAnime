@@ -21,6 +21,7 @@ hikaricp = "5.1.0"
 logback = "1.4.14"
 # @pin
 tornadofx = "2.0.0-SNAPSHOT"
+kodein = "7.21.2"
 
 [libraries]
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
@@ -29,7 +30,8 @@ detekt-formating = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", v
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
 ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" }
-ktor-resources = { module = "io.ktor:ktor-server-resources", version.ref = "ktor" }
+ktor-server-resources = { module = "io.ktor:ktor-server-resources", version.ref = "ktor" }
+ktor-server-sessions = { module = "io.ktor:ktor-server-sessions", version.ref = "ktor" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
@@ -47,6 +49,8 @@ hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
 graphql = { module = "com.expediagroup:graphql-kotlin-ktor-client", version.ref = "graphql" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 tornadofx = { module = "no.tornado:tornadofx", version.ref = "tornadofx" }
+kodein = { module = "org.kodein.di:kodein-di", version.ref = "kodein" }
+kodein-ktor = { module = "org.kodein.di:kodein-di-framework-ktor-server-jvm", version.ref = "kodein" }
 
 [bundles]
 databases = [
@@ -60,15 +64,18 @@ databases-runtime = [
     "exposed-jdbc",
     "postgresql",
 ]
+kodein = ["kodein", "kodein-ktor"]
+
 ktor = [
     "ktor-client-content-negociation",
     "ktor-client-core",
     "ktor-client-logging",
     "ktor-client-okhttp",
-    "ktor-resources",
+    "ktor-server-resources",
     "ktor-serialization-kotlinx-json",
     "ktor-server-call-logging",
     "ktor-server-content-negotiation",
+    "ktor-server-sessions",
     "ktor-server-core",
     "ktor-server-netty",
 ]

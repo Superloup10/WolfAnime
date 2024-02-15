@@ -54,6 +54,7 @@ ktor {
 }
 
 dependencies {
+    implementation(libs.bundles.kodein)
     implementation(libs.bundles.ktor)
     implementation(libs.graphql)
     implementation(libs.bundles.databases)

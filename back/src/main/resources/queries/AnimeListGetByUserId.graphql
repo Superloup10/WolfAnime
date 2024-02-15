@@ -1,0 +1,39 @@
+query ($userId: Int) {
+    MediaListCollection(userId: $userId, type: ANIME) {
+        user {
+            id
+            name
+        }
+        lists {
+            entries {
+                id
+                media {
+                    id
+                    title {
+                        romaji
+                        english
+                        native
+                    }
+                    episodes
+                    format
+                    externalLinks {
+                        url
+                    }
+                }
+                status
+                startedAt {
+                    year
+                    month
+                    day
+                }
+                completedAt {
+                    year
+                    month
+                    day
+                }
+                progress
+                repeat
+            }
+        }
+    }
+}

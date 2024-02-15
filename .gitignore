@@ -292,3 +292,4 @@ Temporary Items
 /.idea/remote-targets.xml
 /.idea/webServers.xml
 /.idea/deployment.xml
+.secrets
