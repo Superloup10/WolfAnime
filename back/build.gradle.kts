@@ -42,7 +42,7 @@ tasks.withType<KotlinCompile> {
 }*/
 
 application {
-    applicationDefaultJvmArgs = listOf("-Djava.library.path=build/libs")
+    applicationDefaultJvmArgs = listOf("-Djava.library.path=$rustLibAbsolutePath")
     mainClass.set("io.ktor.server.netty.EngineMain")
 }
 

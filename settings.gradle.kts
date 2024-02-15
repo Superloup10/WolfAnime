@@ -11,10 +11,10 @@ pluginManagement {
 dependencyResolutionManagement {
     @Suppress("UnstableApiUsage")
     repositories {
-        mavenCentral()
         maven("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
         maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
+        mavenCentral()
     }
 }
 
