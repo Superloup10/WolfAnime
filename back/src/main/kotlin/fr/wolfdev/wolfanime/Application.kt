@@ -1,11 +1,10 @@
 package fr.wolfdev.wolfanime
 
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
+import fr.wolfdev.wolfanime.config.DatabaseFactory
 import fr.wolfdev.wolfanime.config.ModulesConfig
-import fr.wolfdev.wolfanime.dao.DAOFacadeImpl
-import fr.wolfdev.wolfanime.dao.DatabaseFactory
 import fr.wolfdev.wolfanime.domain.Series
-import fr.wolfdev.wolfanime.domain.service.UserService
+import fr.wolfdev.wolfanime.domain.service.*
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.logging.DEFAULT
@@ -57,8 +56,11 @@ fun Application.module() {
         exitCodeSupplier = { 0 } // ApplicationCall.() -> Int
     }
     DatabaseFactory.init(environment.config)
-    val dao = DAOFacadeImpl() // TODO This line will be deleted in the future
     val userController by ModulesConfig.kodein.instance<UserService>()
+    val mediaTitleController by ModulesConfig.kodein.instance<MediaTitleService>()
+    val crunchyrollController by ModulesConfig.kodein.instance<CrunchyrollService>()
+    val mediaController by ModulesConfig.kodein.instance<MediaService>()
+    val mediaListController by ModulesConfig.kodein.instance<MediaListService>()
     routing {
         get("/") {
             call.respondText("Hello World!")
@@ -68,7 +70,7 @@ fun Application.module() {
             val crunchyrollNative = CrunchyrollNative.getCrunchyrollDataBySeriesId("GYZJ43JMR")
             call.respond(mapOf("GYZJ43JMR" to Json.decodeFromString<Series>(crunchyrollNative))) // TODO : Replace by dynamique map
         }
-        getAnilistByUsername(dao, userController)
+        getAnilistByUsername(userController, mediaTitleController, crunchyrollController, mediaController, mediaListController)
         get("/animeName") {
             if (call.request.queryParameters.isEmpty()) {
                 return@get call.respond(HttpStatusCode.BadRequest, "/animeName?username=<username>")
@@ -77,7 +79,7 @@ fun Application.module() {
             if (username.isNullOrEmpty()) {
                 return@get call.respond(HttpStatusCode.BadRequest, "Vous n'avez pas saisi de nom d'utilisateur !")
             }
-            call.respond(dao.getNameMediaListCompleteWithStartedAtIsNull(username))
+            call.respond(mediaListController.getNameMediaListCompleteWithStartedAtIsNull(username))
         }
     }
 }

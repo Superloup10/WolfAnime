@@ -1,7 +1,6 @@
 package fr.wolfdev.wolfanime
 
-import fr.wolfdev.wolfanime.dao.DAOFacade
-import fr.wolfdev.wolfanime.domain.service.UserService
+import fr.wolfdev.wolfanime.domain.service.*
 import fr.wolfdev.wolfanime.graphql.generated.AnimeListGetByUserId
 import fr.wolfdev.wolfanime.graphql.generated.UserIdGetByName
 import io.ktor.client.request.get
@@ -18,7 +17,13 @@ class Anilist(val username: String? = null) {
     class Format
 }
 
-fun Route.getAnilistByUsername(dao: DAOFacade, userService: UserService) {
+fun Route.getAnilistByUsername(
+    userService: UserService,
+    mediaTitleService: MediaTitleService,
+    crunchyrollService: CrunchyrollService,
+    mediaService: MediaService,
+    mediaListService: MediaListService
+) {
     get<Anilist> { anilist ->
         if (call.request.queryParameters.isEmpty()) {
             return@get call.respond(HttpStatusCode.BadRequest, "/anilist?username=<username>")
@@ -63,29 +68,29 @@ fun Route.getAnilistByUsername(dao: DAOFacade, userService: UserService) {
              }
          }*/
         // ----------------------------------------MEDIATITLE------------------------------------------------------//
-        val existingTitles = dao.getAllMediaTitle(titleList?.map { it?.romaji ?: "romaji" }!!)
+        val existingTitles = mediaTitleService.getAllMediaTitle(titleList?.map { it?.romaji ?: "romaji" }!!)
         val newTitles = titleList.filter { title -> existingTitles.none { it?.romaji == title?.romaji } }
-        val updatedTitles = handleNewData(existingTitles, newTitles) { dao.addBatchInsertMediaTitle(it) }
+        val updatedTitles = handleNewData(existingTitles, newTitles) { mediaTitleService.addBatchInsertMediaTitle(it) }
         // ----------------------------------------CRUNCHYROLL-----------------------------------------------------//
-        val existingUrls = dao.getAllCrunchyroll(urlList!!)
+        val existingUrls = crunchyrollService.getAllCrunchyroll(urlList!!)
         val newUrls = urlList.filter { url -> existingUrls.none { it?.originalUrl == url } }
             .associateWith { httpClient.get(it).request.url.toString() }
-        val updatedUrls = handleNewData(existingUrls, newUrls) { dao.addBatchInsertCrunchyroll(it) }
+        val updatedUrls = handleNewData(existingUrls, newUrls) { crunchyrollService.addBatchInsertCrunchyroll(it) }
         // ----------------------------------------MEDIA-----------------------------------------------------------//
         /*medias.forEach {
-            val dataUpdate = dao.updateFormatMedia(it?.id!!, MediaFormat.valueOf(it.format?.name ?: "EMPTY"))
+            val dataUpdate = mediaService.updateFormatMedia(it?.id!!, MediaFormat.valueOf(it.format?.name ?: "EMPTY"))
             call.application.environment.log.debug("Nombre de ligne update : $dataUpdate")
         }*/
-        val existingMedias = dao.getAllMedia(medias.map { it?.id!! })
+        val existingMedias = mediaService.getAllMedia(medias.map { it?.id!! })
         val newMedias = medias.filter { media -> existingMedias.none { it?.id == media?.id } }
         val updatedMedias = handleNewData(existingMedias, newMedias) {
-            dao.addBatchInsertMedia(it, updatedTitles, updatedUrls)
+            mediaService.addBatchInsertMedia(it, updatedTitles, updatedUrls)
         }
         // ----------------------------------------MEDIALIST-------------------------------------------------------//
-        val existingMediaLists = dao.getAllMediaList(mediaLists.map { it?.id!! })
+        val existingMediaLists = mediaListService.getAllMediaList(mediaLists.map { it?.id!! })
         val newMediaLists = mediaLists.filter { mediaList -> existingMediaLists.none { it?.id == mediaList?.id } }
         val updatedMediaLists = handleNewData(existingMediaLists, newMediaLists) {
-            dao.addBatchInsertMediaList(it, user, updatedMedias)
+            mediaListService.addBatchInsertMediaList(it, user, updatedMedias)
         }
         call.respond(updatedMediaLists.associateBy { it?.id })
     }

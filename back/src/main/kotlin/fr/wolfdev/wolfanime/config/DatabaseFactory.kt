@@ -1,17 +1,11 @@
-package fr.wolfdev.wolfanime.dao
+package fr.wolfdev.wolfanime.config
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import fr.wolfdev.wolfanime.domain.CrunchyrollTable
-import fr.wolfdev.wolfanime.domain.MediaListTable
-import fr.wolfdev.wolfanime.domain.MediaTable
-import fr.wolfdev.wolfanime.domain.MediaTitleTable
 import io.ktor.server.config.ApplicationConfig
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.File
 
 object DatabaseFactory {
@@ -40,10 +34,7 @@ object DatabaseFactory {
         }
         val username = config.property("storage.username").getString()
         val password = config.property("storage.password").getString()
-        val database = Database.connect(createHikariDataSource(jdbcUrl, driverClassName, username, password))
-        transaction(database) {
-            SchemaUtils.create(MediaTitleTable, CrunchyrollTable, MediaTable, MediaListTable)
-        }
+        Database.connect(createHikariDataSource(jdbcUrl, driverClassName, username, password))
     }
 
     suspend fun <T> dbQuery(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO) { block() }

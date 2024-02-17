@@ -1,4 +1,4 @@
-FROM rust:1.75-bookworm AS rust_builder
+FROM rust:1.76-bookworm AS rust_builder
 LABEL org.opencontainers.image.authors="Superloup10@gmail.com"
 
 WORKDIR /usr/src/rust_lib
@@ -16,7 +16,7 @@ WORKDIR /home/gradle/src
 COPY --chown=gradle:gradle . .
 RUN gradle buildFatJar --no-daemon --build-cache
 
-FROM eclipse-temurin:21.0.1_12-jdk
+FROM eclipse-temurin:21.0.2_13-jdk
 LABEL org.opencontainers.image.authors="Superloup10@gmail.com"
 EXPOSE 8080
 RUN mkdir /app

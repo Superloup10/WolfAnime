@@ -1,6 +1,6 @@
 package fr.wolfdev.wolfanime.domain.repository
 
-import fr.wolfdev.wolfanime.dao.DatabaseFactory.dbQuery
+import fr.wolfdev.wolfanime.config.DatabaseFactory.dbQuery
 import fr.wolfdev.wolfanime.domain.User
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
